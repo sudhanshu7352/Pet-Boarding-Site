@@ -2,11 +2,12 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getData } from "../redux/action";
+import { filterData, getData } from "../redux/action";
 import "./home.css";
 import { useNavigate } from "react-router-dom";
 export const Home = () => {
   const { petData } = useSelector((store) => store.petData);
+  const  filterPetData = useSelector((store) => store.petData.filterPetData);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -46,11 +47,20 @@ export const Home = () => {
 
           // getPetData()
     }
+    if(id =="FilterByVerify" ){
+         // console.log(value)
+        dispatch(filterData(value))
+    }
   }
 
   return (
     <>
       <div>
+      <select name="" id="FilterByVerify" onChange={handleCostSort}>
+          <option value="">--Filter by Verified--</option>
+          <option value="yes">Yes</option>
+          <option value="no">No</option>
+        </select>
         <select name="" id="sortByCost" onChange={handleCostSort}>
           <option value="">--sort by cost--</option>
           <option value="high">high to low</option>
@@ -79,7 +89,7 @@ export const Home = () => {
           </thead>
 
           <tbody>
-            {petData.map((el) => (
+            {petData &&filterPetData.map((el) => (
               <tr onClick={() => navigate(`/listing/${el.id}`)} key={el.id}>
                 <td>{counter++}</td>
                 <td>{el.name}</td>
